@@ -1,0 +1,85 @@
+<div class="d-flex justify-content-between align-items-center mb-3 border-bottom-1">
+    <h2>درخواست های کاربران</h2>
+    <div class="btn-group">
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>نام</th>
+            <th>ایمیل</th>
+            <th>موضوع</th>
+            <th>پیام</th>
+            <th>تنظیمات</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% contacts.map(contact=> { %>
+            <tr>
+                <td>
+                    <%= contact.name %>
+                </td>
+                <td>
+                    <%= contact.email %>
+                </td>
+                <td>
+                    <%= contact.subject %>
+                </td>
+                <td>
+                    <%= contact.message %>
+                </td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <button data-toggle="modal" data-contactid="<%= contact._id %>" data-target="#deleteOrder"
+                                class="btn btn-danger">حذف
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        <% }) %>
+
+        </tbody>
+    </table>
+
+
+
+    <div class="modal fade" id="deleteOrder" tabindex="-1" role="dialog" aria-labelledby="deleteCourseLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" style="color: red" id="exampleModalLabel">حذف</h5>
+                    <div class="float-left">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+                <form action="/admin/contact_us/delete/1dw53ada51dawdad123dwadawdas?_method=DELETE" method="post">
+
+                    <div class="modal-body">
+                        <input type="hidden" name="contact_id" id="contact_id" value="">
+                        آیا از حذف این درخواست  مطمعن هستید؟
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">بستن</button>
+                        <button type="submit" class="btn btn-danger mr-2">بله</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        $('#deleteOrder').on('show.bs.modal', function (event) {
+            let button = $(event.relatedTarget);
+            let contact_id = button.data('contactid');
+            let modal = $(this);
+            modal.find('.modal-body #contact_id').val(contact_id);
+        })
+    </script>
+</div>

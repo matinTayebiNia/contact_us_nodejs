@@ -1,0 +1,70 @@
+<div class="container">
+    <div class="row pt-3 justify-content-center">
+        <div class="col-8">
+            <div class="card card-defult">
+                <div class="card">
+                    <div class="card-header text-md-center">
+                        <h5> تماس با ما</h5>
+                    </div>
+                    <div class="card-body">
+                        <form action="#" class="form-group">
+                            <label for="name"> نام:</label>
+                            <input type="text" class="form-control" name="name" id="name">
+                            <label for="email">ایمیل:</label>
+                            <input type="text" class="form-control" name="email" id="email">
+                            <label for="subject">موضوع:</label>
+                            <input type="text" class="form-control" name="subject" id="subject">
+                            <label for="message">پیام:</label>
+                            <textarea class="form-control" name="message" id="message"></textarea>
+                            <input type="button" class="btn btn-primary mt-2" onclick="sendMessage()"
+                                   value="ارسال پیام">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/javascriptFile/js/socket.io.js"></script>
+<script>
+    const socket = io("/")
+
+    function sendMessage() {
+        let data = {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            subject: document.getElementById("subject").value,
+            message: document.getElementById("message").value
+        }
+        socket.emit("messageSent", data)
+
+        fetch("/contact_us", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json())
+            .then(res => {
+                if (res.status === "success") {
+                    Swal.fire({
+                        toast: false,
+                        icon: "success",
+                        title: 'ثبت شد',
+                        text: 'درخواست شما با موفقیت ثبت شد',
+                        showConfirmButton: true,
+                        confirmButtonText: 'باشه',
+
+                    }).then(() => {
+                        document.getElementById("name").value = null;
+                        document.getElementById("email").value = null
+                        document.getElementById("subject").value = null
+                        document.getElementById("message").value = null
+                    })
+                }
+            })
+
+
+    }
+</script>
